@@ -50,7 +50,7 @@ function generateHTML(items) {
   ul{list-style:none;padding-left:1em;}
   a{text-decoration:none;color:#0366d6;}
   </style>
-  </head><body><h1>Directory Listing test</h1><ul>`;
+  </head><body><ul>`;
 
     for (const item of items) {
         html += `<li><a href="${item.path}">${item.name}</a>`;
