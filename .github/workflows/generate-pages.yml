@@ -1,0 +1,40 @@
+name: Generate Directory Listing
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate index.html
+        run: |
+          echo "<html><head><title>Directory Listing</title></head><body><h1>Directory Listing</h1><ul>" > index.html
+          find . -type f ! -path "./.git/*" | sed 's|^\./||' | while read file; do
+            echo "<li><a href=\"$file\">$file</a></li>" >> index.html
+          done
+          echo "</ul></body></html>" >> index.html
+
+      - name: Upload artifact to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
