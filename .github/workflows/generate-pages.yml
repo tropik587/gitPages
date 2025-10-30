@@ -15,9 +15,17 @@ jobs:
       - name: Generate index.html
         run: |
           echo "<html><head><title>Directory Listing</title></head><body><h1>Directory Listing</h1><ul>" > index.html
-          find . -type f ! -path "./.git/*" | sed 's|^\./||' | while read file; do
-            echo "<li><a href=\"$file\">$file</a></li>" >> index.html
-          done
+
+          # Generate links, excluding .git, .github, and specific workflow files
+          find . -type f \
+            ! -path "./.git/*" \
+            ! -path "./.github/*" \
+            ! -path "./.github/workflows/generate-pages.yml" \
+            ! -path "./.github/workflows/static.yml" \
+            | sed 's|^\./||' | while read file; do
+              echo "<li><a href=\"$file\">$file</a></li>" >> index.html
+            done
+
           echo "</ul></body></html>" >> index.html
 
       - name: Upload artifact to Pages
