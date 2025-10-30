@@ -4,66 +4,71 @@ import path from "path";
 
 const ROOT = process.cwd();
 
-// Excluded paths
+// Files/folders to exclude
 const EXCLUDES = [
-    ".git",
-    ".github",
-    ".github/workflows/generate-pages.yml",
-    ".github/workflows/static.yml",
-    "node_modules",
+  ".git",
+  ".github",
+  ".github/workflows/generate-pages.yml",
+  ".github/workflows/static.yml",
+  "node_modules",
+  "css/style.css", // don’t list the style file itself
 ];
 
-// Recursively walk through directories and generate links
+// Recursively list files and directories
 function listFiles(dir) {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    const items = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const items = [];
 
-    for (const entry of entries) {
-        const relPath = path.relative(ROOT, path.join(dir, entry.name));
+  for (const entry of entries) {
+    const relPath = path.relative(ROOT, path.join(dir, entry.name));
 
-        // Skip excluded paths
-        if (EXCLUDES.some(ex => relPath.startsWith(ex))) continue;
+    // Skip excluded paths
+    if (EXCLUDES.some(ex => relPath.startsWith(ex))) continue;
 
-        if (entry.isDirectory()) {
-            items.push({
-                name: entry.name + "/",
-                path: relPath + "/index.html",
-                type: "dir",
-                children: listFiles(path.join(dir, entry.name))
-            });
-        } else {
-            items.push({
-                name: entry.name,
-                path: relPath,
-                type: "file"
-            });
-        }
-    }
-    return items;
+    items.push({
+      name: entry.name,
+      path: relPath + (entry.isDirectory() ? "/" : ""),
+      type: entry.isDirectory() ? "dir" : "file",
+    });
+  }
+
+  return items;
 }
 
-// Generate HTML
+// Generate HTML referencing external CSS
 function generateHTML(items) {
-    let html = `<html><head><title>Directory Listing</title>
-  <style>
-  body{font-family:Arial;margin:2em;}
-  ul{list-style:none;padding-left:1em;}
-  a{text-decoration:none;color:#0366d6;}
-  </style>
-  </head><body><ul>`;
-
-    for (const item of items) {
-        html += `<li><a href="${item.path}">${item.name}</a>`;
-        if (item.children) html += generateHTML(item.children);
-        html += `</li>`;
-    }
-
-    html += `</ul></body></html>`;
-    return html;
+  return `
+  <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>Directory Listing</title>
+      <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+      <h1>Directory Listing</h1>
+      <div class="container">
+        ${items
+          .map(
+            item => `
+            <div class="item">
+              <div class="icon">${item.type === "dir" ? "📁" : "📄"}</div>
+              <a href="${item.path}">${item.name}</a>
+            </div>`
+          )
+          .join("\n")}
+      </div>
+    </body>
+  </html>`;
 }
 
-// Run generator
-const files = listFiles(ROOT);
-const html = generateHTML(files);
+// Run the generator
+const items = listFiles(ROOT);
+const html = generateHTML(items);
+
+// Ensure css directory exists if not already
+if (!fs.existsSync(path.join(ROOT, "css"))) {
+  fs.mkdirSync(path.join(ROOT, "css"));
+}
+
 fs.writeFileSync("index.html", html);
 console.log("✅ index.html generated successfully!");

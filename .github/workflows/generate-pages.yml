@@ -17,9 +17,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Generate index.html with Node
-        run: |
-          node generate-index.js
+      - name: Generate index.html
+        run: node generate-index.js
 
       - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v3
