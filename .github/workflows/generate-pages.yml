@@ -12,21 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Generate index.html
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate index.html with Node
         run: |
-          echo "<html><head><title>Directory Listing</title></head><body><h1>Directory Listing</h1><ul>" > index.html
-
-          # Generate links, excluding .git, .github, and specific workflow files
-          find . -type f \
-            ! -path "./.git/*" \
-            ! -path "./.github/*" \
-            ! -path "./.github/workflows/generate-pages.yml" \
-            ! -path "./.github/workflows/static.yml" \
-            | sed 's|^\./||' | while read file; do
-              echo "<li><a href=\"$file\">$file</a></li>" >> index.html
-            done
-
-          echo "</ul></body></html>" >> index.html
+          node generate-index.js
 
       - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v3
