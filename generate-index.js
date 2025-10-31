@@ -8,10 +8,13 @@ const ROOT = process.cwd();
 const EXCLUDES = [
   ".git",
   ".github",
-  ".github/workflows/generate-pages.yml",
+  ".github/workflows/generatePage.yml",
+  ".github/workflows/publish.yml",
+  ".github/workflows/validate.yml",
   ".github/workflows/static.yml",
+  "generate-index.js",
   "node_modules",
-  "css/style.css"
+  "css"
 ];
 
 function listFiles(dir) {
@@ -26,21 +29,24 @@ function listFiles(dir) {
 }
 
 function generateHTML(items, relativePath = "") {
+  const cssPath = relativePath ? "../".repeat(relativePath.split("/").length) : "";
+
   return `
   <html>
     <head>
       <meta charset="UTF-8" />
       <title>Directory Listing - ${relativePath || "/"}</title>
-      <link rel="stylesheet" href="${relativePath ? "../".repeat(relativePath.split("/").length) : ""}css/style.css" />
+      <link rel="stylesheet" href="${cssPath}css/style.css" />
     </head>
     <body>
       <h1>Directory Listing: /${relativePath || ""}</h1>
       <div class="container">
-        ${relativePath ? `<div class="item"><div class="icon">⬅️</div><a href="../">Back</a></div>` : ""}
+        ${relativePath ? `<div class="item back"><div class="icon">⬅️</div><a href="../">Back</a></div>` : ""}
         ${items.map(item => `
           <div class="item">
             <div class="icon">${item.isDir ? "📁" : "📄"}</div>
-            <a href="${item.isDir ? item.name + "/index.html" : item.name}">${item.name}</a>
+            <a class="name" href="${item.isDir ? item.name + "/index.html" : item.name}">${item.name}</a>
+            ${!item.isDir ? `<a class="download-btn" href="${item.name}" download title="Download ${item.name}">⬇️</a>` : ""}
           </div>
         `).join("\n")}
       </div>
@@ -61,11 +67,6 @@ function generateIndexes(currentDir = ROOT, relativePath = "") {
       generateIndexes(entry.fullPath, path.relative(ROOT, entry.fullPath));
     }
   }
-}
-
-// Ensure CSS directory exists
-if (!fs.existsSync(path.join(ROOT, "css"))) {
-  fs.mkdirSync(path.join(ROOT, "css"));
 }
 
 // Run generator

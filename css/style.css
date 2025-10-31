@@ -1,45 +1,66 @@
+/* css/style.css */
+
 body {
   font-family: Arial, sans-serif;
-  margin: 2em;
-  background: #f8f9fa;
+  background-color: #f9f9f9;
+  margin: 40px;
+  color: #333;
 }
 
 h1 {
-  text-align: center;
+  font-size: 1.6em;
+  margin-bottom: 1em;
 }
 
 .container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 120px;
-  padding: 10px;
-  border: 1px solid #ddd;
+  gap: 10px;
+  padding: 6px 10px;
+  background: #fff;
   border-radius: 6px;
-  background: white;
-  text-align: center;
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background 0.2s;
 }
 
 .item:hover {
-  background: #e9ecef;
-  transform: translateY(-3px);
+  background: #eef6ff;
 }
 
 .icon {
-  font-size: 40px;
+  width: 24px;
 }
 
-a {
-  text-decoration: none;
+.name {
+  flex: 1;
   color: #0078d4;
-  font-size: 14px;
-  word-break: break-all;
+  text-decoration: none;
+}
+
+.name:hover {
+  text-decoration: underline;
+}
+
+.download-btn {
+  padding: 4px 8px;
+  background-color: #0078d4;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.download-btn:hover {
+  background-color: #005fa3;
+}
+
+.item.back {
+  background: none;
+  box-shadow: none;
 }
