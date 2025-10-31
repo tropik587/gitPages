@@ -8,11 +8,7 @@ const DATA_FILE = "directory.json";
 
 const EXCLUDES = [
   ".git",
-  ".github",
-  "node_modules",
-  "css",
-  "js",
-  "generate-index.js"
+  ".github"
 ];
 
 // Recursively read files
