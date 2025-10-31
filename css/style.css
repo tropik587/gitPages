@@ -39,13 +39,14 @@ h1 {
 
 .name {
   flex: 1;
-  color: #0078d4;
+  color: #0078d3;
   text-decoration: none;
 }
 
 .name:hover {
   text-decoration: underline;
 }
+
 
 .download-btn {
   padding: 4px 8px;
