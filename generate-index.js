@@ -95,4 +95,4 @@ function generateIndexes(currentDir = ROOT, relativePath = "") {
 
 // Run generator
 generateIndexes();
-con
+console.log("🎉 All index.html files generated successfully!");
