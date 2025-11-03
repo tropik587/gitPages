@@ -1,40 +1,66 @@
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f5f7fa;
-  color: #333;
-  margin: 0;
-  padding: 2rem;
-}
+/* css/style.css */
 
-.app {
-  max-width: 800px;
-  margin: auto;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 40px;
+  color: #333;
 }
 
 h1 {
-  font-size: 1.8rem;
+  font-size: 1.6em;
+  margin-bottom: 1em;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+
+.item:hover {
+  background: #eef6ff;
+}
+
+.icon {
+  width: 24px;
+}
+
+.name {
+  flex: 1;
   color: #0078d4;
-}
-
-ul.directory {
-  list-style: none;
-  padding-left: 1.2rem;
-}
-
-li {
-  margin: 4px 0;
-}
-
-a {
   text-decoration: none;
-  color: #0078d4;
 }
 
-a:hover {
+.name:hover {
   text-decoration: underline;
 }
 
-summary {
-  cursor: pointer;
-  font-weight: bold;
+.download-btn {
+  padding: 4px 8px;
+  background-color: #0078d4;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.download-btn:hover {
+  background-color: #005fa3;
+}
+
+.item.back {
+  background: none;
+  box-shadow: none;
 }
